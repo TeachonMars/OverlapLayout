@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="overlapLayoutStyle" format="reference" />
+
+    <attr name="maxChildShowCount" format="integer" />
+    <attr name="overlapFactor" format="fraction" />
+    <attr name="renderOrder">
+        <enum name="bottomToTop" value="0" />
+        <enum name="topToBottom" value="1" />
+    </attr>
+    <declare-styleable name="OverlapLayout">
+        <attr name="android:orientation" />
+        <attr name="android:gravity" />
+        <attr name="maxChildShowCount" />
+        <attr name="overlapFactor" />
+        <attr name="renderOrder" />
+    </declare-styleable>
+</resources>

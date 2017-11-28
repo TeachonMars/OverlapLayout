@@ -1,0 +1,54 @@
+buildscript {
+    repositories {
+        jcenter()
+        google()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        google()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+ext {
+    bintrayRepo = 'modules'
+    bintrayName = 'OverlapLayout'
+
+    pomGroupId = 'com.teachonmars.modules'
+    pomArtifactId = 'overlapLayout'
+    pomName = 'OverlapLayout'
+    pomPackaging = 'aar'
+
+    pomDescription = 'A layout to arrange children overlapping each other'
+
+    siteUrl = 'https://github.com/TeachonMars/OverlapLayout'
+    gitUrl = 'https://github.com/TeachonMars/OverlapLayout.git'
+
+    libraryVersion = '0.0.1'
+
+    developerId = 'benjaminVadon'
+    developerName = 'Benjamin Vadon'
+    developerEmail = 'development@teachonmars.com'
+    pomOrganizationName = 'teachonmars'
+    pomOrganizationUrl = 'https://teachonmars.com'
+    licenseName = 'The MIT License'
+    licenseUrl = 'https://opensource.org/licenses/MIT'
+    allLicenses = ["MIT"]
+
+    androidCompileSdk = 27
+    androidBuildTools = "27.0.1"
+    androidMinSdk = 14
+    androidTargetSdk = 27
+    depsAndroidSupport = "27.0.1"
+}

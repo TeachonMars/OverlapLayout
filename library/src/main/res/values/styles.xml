@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="OverlapLayoutDefault">
+        <item name="android:gravity">end</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="maxChildShowCount">@integer/defaultChildShowCount</item>
+        <item name="overlapFactor">@fraction/defaultOverlapFactor</item>
+        <item name="renderOrder">topToBottom</item>
+    </style>
+
+</resources>
