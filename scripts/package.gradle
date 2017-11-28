@@ -11,11 +11,6 @@ if (project.hasProperty("android")) {
         exclude '**/BuildConfig.java'
         exclude '**/R.java'
     }
-    afterEvaluate {
-        javadoc.classpath += files(android.libraryVariants.collect { variant ->
-            variant.javaCompile.classpath.files
-        })
-    }
 } else { // Java libraries
     task sourcesJar(type: Jar, dependsOn: classes) {
         classifier = 'sources'

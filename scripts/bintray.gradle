@@ -21,6 +21,7 @@ bintray {
         publicDownloadNumbers = true
         version {
             desc = pomDescription
+            released = new Date()
             gpg {
                 sign = true
                 passphrase = properties.getProperty("bintray.gpg.password")

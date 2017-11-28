@@ -4,13 +4,13 @@
         apply from: "${rootProject.projectDir}/scripts/${scriptName}.gradle"
 }
 
-task publishBintray(group: "androidPublication") {
+task publishBintray(group: "publish") {
     dependsOn 'clean'
-    dependsOn ':library:assembleRelease'
-    dependsOn ':library:bintrayUpload'
+    dependsOn "${project.path}:assembleRelease"
+    dependsOn "${project.path}:bintrayUpload"
 }
 
-task publishLocal(group: "androidPublication") {
-    dependsOn ':library:build'
-    dependsOn ':library:install'
+task publishLocal(group: "publish") {
+    dependsOn "${project.path}:build"
+    dependsOn "${project.path}:install"
 }
