@@ -30,12 +30,12 @@ ext {
     pomName = 'OverlapLayout'
     pomPackaging = 'aar'
 
-    pomDescription = 'A layout to arrange children overlapping each other'
+    pomDescription = 'A layout to arrange children overlapping each others'
 
     siteUrl = 'https://github.com/TeachonMars/OverlapLayout'
     gitUrl = 'https://github.com/TeachonMars/OverlapLayout.git'
 
-    libraryVersion = '0.0.1'
+    libraryVersion = '1.0.0'
 
     developerId = 'benjaminVadon'
     developerName = 'Benjamin Vadon'
