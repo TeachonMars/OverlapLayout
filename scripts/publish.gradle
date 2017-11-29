@@ -6,7 +6,7 @@
 
 task publishBintray(group: "publish") {
     dependsOn 'clean'
-    dependsOn "${project.path}:assembleRelease"
+    dependsOn "${project.path}:build"
     dependsOn "${project.path}:bintrayUpload"
 }
 
