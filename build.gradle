@@ -35,7 +35,7 @@ ext {
     siteUrl = 'https://github.com/TeachonMars/OverlapLayout'
     gitUrl = 'https://github.com/TeachonMars/OverlapLayout.git'
 
-    libraryVersion = '0.0.1'
+    libraryVersion = '1.0.0'
 
     developerId = 'benjaminVadon'
     developerName = 'Benjamin Vadon'
