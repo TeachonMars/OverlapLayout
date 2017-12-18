@@ -42,7 +42,9 @@ class ChildLayoutDelegate {
                 if (nbLayouted == 0) {
                     horizontalInitChildPosition(child);
                 } else {
-                    childPosition.offset((int) (child.getMeasuredWidth() * parent.overlapFactor), 0);
+                    int childWidth = child.getMeasuredWidth();
+                    childPosition.right += childWidth * parent.overlapFactor;
+                    childPosition.left = childPosition.right - childWidth;
                 }
                 child.layout(childPosition.left, childPosition.top, childPosition.right, childPosition.bottom);
                 nbLayouted++;
@@ -106,7 +108,9 @@ class ChildLayoutDelegate {
                 if (nbLayouted == 0) {
                     verticalInitChildPosition(child);
                 } else {
-                    childPosition.offset(0, (int) (child.getMeasuredHeight() * parent.overlapFactor));
+                    int childHeight = child.getMeasuredHeight();
+                    childPosition.bottom += childHeight * parent.overlapFactor;
+                    childPosition.top = childPosition.bottom - childHeight;
                 }
                 child.layout(childPosition.left, childPosition.top, childPosition.right, childPosition.bottom);
                 nbLayouted++;
