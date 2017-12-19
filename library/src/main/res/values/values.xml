@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="defaultChildShowCount">3</integer>
-    <item name="defaultOverlapFactor" type="fraction">66%</item>
+    <item name="defaultOverlapFactor" type="fraction">33%</item>
 </resources>

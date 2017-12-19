@@ -24,42 +24,41 @@
             app:layoutManager="LinearLayoutManager" />
 
         <com.teachonmars.modules.widget.overlapLayout.OverlapLayout
-            android:id="@+id/overlap1"
+            android:id="@+id/overlapHorStart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start" />
 
         <com.teachonmars.modules.widget.overlapLayout.OverlapLayout
-            android:id="@+id/overlap2"
+            android:id="@+id/overlapHorCenter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center" />
+
+        <com.teachonmars.modules.widget.overlapLayout.OverlapLayout
+            android:id="@+id/overlapHorEnd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end" />
 
         <com.teachonmars.modules.widget.overlapLayout.OverlapLayout
-            android:id="@+id/overlap3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:orientation="vertical" />
-
-        <com.teachonmars.modules.widget.overlapLayout.OverlapLayout
-            android:id="@+id/overlap4"
+            android:id="@+id/overlapVerTop"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:gravity="center_horizontal"
+            android:gravity="top"
             android:orientation="vertical"
             android:padding="10dp" />
 
         <com.teachonmars.modules.widget.overlapLayout.OverlapLayout
-            android:id="@+id/overlap5"
+            android:id="@+id/overlapVerCenter"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:gravity="end"
+            android:gravity="center"
             android:orientation="vertical"
             android:padding="10dp" />
 
         <com.teachonmars.modules.widget.overlapLayout.OverlapLayout
-            android:id="@+id/overlap6"
+            android:id="@+id/overlapVerBottom"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:gravity="bottom"
