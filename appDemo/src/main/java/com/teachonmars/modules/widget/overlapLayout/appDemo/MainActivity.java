@@ -31,12 +31,12 @@ public class MainActivity extends AppCompatActivity {
         gravitySelector.setAdapter(adapter);
 
         initOverlapContent(R.id.overlap);
-        initOverlapContent(R.id.overlap1);
-        initOverlapContent(R.id.overlap2);
-        initOverlapContent(R.id.overlap3);
-        initOverlapContent(R.id.overlap4);
-        initOverlapContent(R.id.overlap5);
-        initOverlapContent(R.id.overlap6);
+        initOverlapContent(R.id.overlapHorStart);
+        initOverlapContent(R.id.overlapHorCenter);
+        initOverlapContent(R.id.overlapHorEnd);
+        initOverlapContent(R.id.overlapVerTop);
+        initOverlapContent(R.id.overlapVerCenter);
+        initOverlapContent(R.id.overlapVerBottom);
         initOverlapContent(R.id.overlap7);
     }
 
