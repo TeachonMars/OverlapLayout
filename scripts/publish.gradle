@@ -6,11 +6,21 @@
 
 task publishBintray(group: "publish") {
     dependsOn 'clean'
-    dependsOn "${project.path}:build"
+    dependsOn getBuildTask()
     dependsOn "${project.path}:bintrayUpload"
 }
 
 task publishLocal(group: "publish") {
-    dependsOn "${project.path}:build"
+    dependsOn 'clean'
+    dependsOn getBuildTask()
     dependsOn "${project.path}:install"
+}
+
+def getBuildTask(){
+    def isAndroidProject = project.plugins.hasPlugin('com.android.application') || project.plugins.hasPlugin('com.android.library')
+    if (isAndroidProject) {
+        return "${project.path}:assembleRelease"
+    }else{
+        return "${project.path}:build"
+    }
 }

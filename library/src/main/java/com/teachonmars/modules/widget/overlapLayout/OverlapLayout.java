@@ -116,9 +116,9 @@ public class OverlapLayout extends ViewGroup {
 
     private void updateAllChildBounds(int childWidth, int childHeight) {
         if (orientation == LinearLayoutCompat.HORIZONTAL) {
-            allChildRect.set(0, 0, allChildRect.isEmpty() ? childWidth : (int) (allChildRect.width() + (overlapFactor * childWidth)), childHeight);
+            allChildRect.set(0, 0, allChildRect.isEmpty() ? childWidth : (int) (allChildRect.width() + (overlapFactor * childWidth)), Math.max(allChildRect.height(), childHeight));
         } else {
-            allChildRect.set(0, 0, childWidth, allChildRect.isEmpty() ? childHeight : (int) (allChildRect.height() + (overlapFactor * childHeight)));
+            allChildRect.set(0, 0, Math.max(allChildRect.width(), childWidth), allChildRect.isEmpty() ? childHeight : (int) (allChildRect.height() + (overlapFactor * childHeight)));
         }
     }
 
