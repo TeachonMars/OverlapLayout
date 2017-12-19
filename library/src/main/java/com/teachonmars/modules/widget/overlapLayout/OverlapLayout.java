@@ -105,7 +105,9 @@ public class OverlapLayout extends ViewGroup {
             View child = getChildAt(pos);
             if (child.getVisibility() != GONE) {
                 measureChildWithMargins(child, widthMeasureSpec, allChildRect.width(), heightMeasureSpec, allChildRect.height());
-                updateAllChildBounds(child.getMeasuredWidth(), child.getMeasuredHeight());
+                LayoutParams lp = (LayoutParams) child.getLayoutParams();
+                updateAllChildBounds(child.getMeasuredWidth() + lp.leftMargin + lp.rightMargin,
+                        child.getMeasuredHeight() + lp.topMargin + lp.bottomMargin);
                 nbMeasured++;
             }
         }
