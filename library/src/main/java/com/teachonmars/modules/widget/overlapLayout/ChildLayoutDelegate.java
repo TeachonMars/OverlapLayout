@@ -12,7 +12,6 @@ class ChildLayoutDelegate {
     private final Rect          childPosition;
     private final Rect          availableSpace;
     private final OverlapLayout parent;
-    private       int           layoutDirection;
     private       int           parentHorizontalGravity;
     private       int           parentVerticalGravity;
 
@@ -31,145 +30,145 @@ class ChildLayoutDelegate {
         }
     }
 
+    private void initBeforeLayout(int l, int t, int r, int b) {
+        availableSpace.set(parent.getPaddingLeft(), parent.getPaddingTop(), r - l - parent.getPaddingRight(), b - t - parent.getPaddingBottom());
+        parentHorizontalGravity = Gravity.getAbsoluteGravity(parent.getGravity() & Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK, getLayoutDirection(parent));
+        parentVerticalGravity = parent.getGravity() & Gravity.VERTICAL_GRAVITY_MASK;
+    }
+
     private void layoutHorizontal() {
         int nbLayouted = 0;
-//        Rect marginRect = new Rect();
+        Rect marginRect = new Rect();
         for (int pos = 0, count = parent.getChildCount(); pos < count && nbLayouted < parent.getMaxChildShowCount(); pos++) {
             View child = parent.getChildAt(pos);
             if (child.getVisibility() != GONE) {
-//                retrieveChildMargins(child, marginRect);
-                alignVerticalChild(child);
+                retrieveChildMargins(child, marginRect);
+                alignVerticalChild(child, marginRect);
                 if (nbLayouted == 0) {
-                    horizontalInitChildPosition(child);
+                    horizontalInitChildPosition(child, marginRect);
                 } else {
-                    int childWidth = child.getMeasuredWidth();
-                    childPosition.right += childWidth * parent.overlapFactor;
-                    childPosition.left = childPosition.right - childWidth;
+                    horizontalPushChildPosition(child, marginRect);
                 }
-                child.layout(childPosition.left, childPosition.top, childPosition.right, childPosition.bottom);
+                layoutChild(child, childPosition, marginRect);
                 nbLayouted++;
             }
         }
     }
 
-//    private void retrieveChildMargins(View child, Rect out) {
-//        OverlapLayout.LayoutParams lp = ((OverlapLayout.LayoutParams) child.getLayoutParams());
-//        out.set(lp.leftMargin, lp.topMargin, lp.rightMargin, lp.bottomMargin);
-//    }
-
-    private void alignVerticalChild(View child) {
-//        int gravity= child.getLayoutParams().gravity;
-//        if(gravity<0){
-//              gravity= parentVerticalGravity;
-//        }
-
-        OverlapLayout.LayoutParams lp = ((OverlapLayout.LayoutParams) child.getLayoutParams());
+    private void alignVerticalChild(View child, Rect marginRect) {
         switch (parentVerticalGravity) {
             case Gravity.TOP:
-                childPosition.top = availableSpace.top + lp.topMargin;
-                childPosition.bottom = childPosition.top + child.getMeasuredHeight();
+                childPosition.top = availableSpace.top;
+                childPosition.bottom = childPosition.top + child.getMeasuredHeight() + marginRect.top + marginRect.bottom;
                 break;
             case Gravity.BOTTOM:
-                childPosition.bottom = availableSpace.bottom - lp.bottomMargin;
-                childPosition.top = childPosition.bottom - child.getMeasuredHeight();
+                childPosition.bottom = availableSpace.bottom;
+                childPosition.top = childPosition.bottom - (child.getMeasuredHeight() + marginRect.top + marginRect.bottom);
                 break;
             case Gravity.CENTER_VERTICAL:
             case Gravity.CENTER:
             default:
-                float childHalfHeight = (child.getMeasuredHeight() + lp.topMargin + lp.bottomMargin) / 2f;
+                float childHalfHeight = (child.getMeasuredHeight() + marginRect.top + marginRect.bottom) / 2f;
                 float parentVerticalCenter = availableSpace.exactCenterY();
-                childPosition.top = (int) (parentVerticalCenter - childHalfHeight + lp.topMargin);
-                childPosition.bottom = (int) (parentVerticalCenter + childHalfHeight - lp.bottomMargin);
+                childPosition.top = (int) (parentVerticalCenter - childHalfHeight);
+                childPosition.bottom = (int) (parentVerticalCenter + childHalfHeight);
                 break;
         }
 
     }
 
-    private void horizontalInitChildPosition(View child) {
-
+    private void horizontalInitChildPosition(View child, Rect marginRect) {
         switch (parentHorizontalGravity) {
             case Gravity.RIGHT:
-                childPosition.left = availableSpace.right - parent.allChildRect.width();
-                childPosition.right = childPosition.left + child.getMeasuredWidth();
+                childPosition.left = availableSpace.right - parent.allChildRect.width() + marginRect.left;
                 break;
             case Gravity.CENTER:
             case Gravity.CENTER_HORIZONTAL:
-                //TODO, fallback to LEFT
+                childPosition.left = (int) (availableSpace.left + (availableSpace.width() - parent.allChildRect.width()) / 2f);
+                break;
             case Gravity.LEFT:
             default:
                 childPosition.left = availableSpace.left;
-                childPosition.right = childPosition.left + child.getMeasuredWidth();
                 break;
         }
+        childPosition.right = childPosition.left + child.getMeasuredWidth() + marginRect.left + marginRect.right;
+    }
+
+    private void horizontalPushChildPosition(View child, Rect marginRect) {
+        int childWidth = child.getMeasuredWidth();
+        childPosition.left = (int) (childPosition.right - parent.overlapFactor * childWidth);
+        childPosition.right = childPosition.left + childWidth + marginRect.left + marginRect.right;
     }
 
     private void layoutVertical() {
         int nbLayouted = 0;
+        Rect marginRect = new Rect();
         for (int pos = 0, count = parent.getChildCount(); pos < count && nbLayouted < parent.getMaxChildShowCount(); pos++) {
             View child = parent.getChildAt(pos);
             if (child.getVisibility() != GONE) {
-                alignHorizontalChild(child);
+                retrieveChildMargins(child, marginRect);
+                alignHorizontalChild(child, marginRect);
                 if (nbLayouted == 0) {
-                    verticalInitChildPosition(child);
+                    verticalInitChildPosition(child, marginRect);
                 } else {
-                    int childHeight = child.getMeasuredHeight();
-                    childPosition.bottom += childHeight * parent.overlapFactor;
-                    childPosition.top = childPosition.bottom - childHeight;
+                    verticalPushChildPosition(child, marginRect);
                 }
-                child.layout(childPosition.left, childPosition.top, childPosition.right, childPosition.bottom);
+                layoutChild(child, childPosition, marginRect);
                 nbLayouted++;
             }
         }
     }
 
-    private void verticalInitChildPosition(View child) {
-        switch (parentVerticalGravity) {
-            case Gravity.BOTTOM:
-                childPosition.top = availableSpace.bottom - parent.allChildRect.height();
-                childPosition.bottom = childPosition.top + child.getMeasuredHeight();
-                break;
-            case Gravity.CENTER:
-            case Gravity.CENTER_VERTICAL:
-                //TODO, fallback to TOP
-            case Gravity.TOP:
-            default:
-                childPosition.top = availableSpace.top;
-                childPosition.bottom = availableSpace.top + child.getMeasuredHeight();
-                break;
-        }
-    }
-
-    private void alignHorizontalChild(View child) {
-//        int gravity= Gravity.getAbsoluteGravity(child.getLayoutParams().gravity, layoutDirection);
-//        if(gravity<0){
-//              gravity= parentVerticalGravity;
-//        }
-        OverlapLayout.LayoutParams lp = ((OverlapLayout.LayoutParams) child.getLayoutParams());
+    private void alignHorizontalChild(View child, Rect marginRect) {
         switch (parentHorizontalGravity) {
             case Gravity.LEFT:
-                childPosition.left = availableSpace.left + lp.leftMargin;
-                childPosition.right = childPosition.left + child.getMeasuredWidth();
+                childPosition.left = availableSpace.left;
+                childPosition.right = childPosition.left + child.getMeasuredWidth() + marginRect.left + marginRect.right;
                 break;
             case Gravity.RIGHT:
-                childPosition.right = availableSpace.right - lp.rightMargin;
-                childPosition.left = childPosition.right - child.getMeasuredWidth();
+                childPosition.right = availableSpace.right;
+                childPosition.left = childPosition.right - (child.getMeasuredWidth() + marginRect.left + marginRect.right);
                 break;
             case Gravity.CENTER_HORIZONTAL:
             case Gravity.CENTER:
             default:
-                float childHalfWidth = (child.getMeasuredWidth() + lp.leftMargin + lp.rightMargin) / 2f;
+                float childHalfWidth = (child.getMeasuredWidth() + marginRect.left + marginRect.right) / 2f;
                 float parentHorizontalCenter = availableSpace.exactCenterX();
-                childPosition.left = (int) (parentHorizontalCenter - childHalfWidth + lp.leftMargin);
-                childPosition.right = (int) (parentHorizontalCenter + childHalfWidth - lp.rightMargin);
+                childPosition.left = (int) (parentHorizontalCenter - childHalfWidth);
+                childPosition.right = (int) (parentHorizontalCenter + childHalfWidth);
                 break;
         }
     }
 
-    private void initBeforeLayout(int l, int t, int r, int b) {
-        layoutDirection = getLayoutDirection(parent);
-        availableSpace.set(parent.getPaddingLeft(), parent.getPaddingTop(), r - l - parent.getPaddingRight(), b - t - parent.getPaddingBottom());
+    private void verticalInitChildPosition(View child, Rect marginRect) {
+        switch (parentVerticalGravity) {
+            case Gravity.BOTTOM:
+                childPosition.top = availableSpace.bottom - parent.allChildRect.height();
+                break;
+            case Gravity.CENTER:
+            case Gravity.CENTER_VERTICAL:
+                childPosition.top = (int) (availableSpace.top + (availableSpace.height() - parent.allChildRect.height()) / 2f);
+                break;
+            case Gravity.TOP:
+            default:
+                childPosition.top = availableSpace.top;
+                break;
+        }
+        childPosition.bottom = childPosition.top + child.getMeasuredHeight() + marginRect.top + marginRect.bottom;
+    }
 
-        parentHorizontalGravity = Gravity.getAbsoluteGravity(parent.getGravity() & Gravity.RELATIVE_HORIZONTAL_GRAVITY_MASK, layoutDirection);
-        parentVerticalGravity = parent.getGravity() & Gravity.VERTICAL_GRAVITY_MASK;
+    private void verticalPushChildPosition(View child, Rect marginRect) {
+        int childHeight = child.getMeasuredHeight();
+        childPosition.top = (int) (childPosition.bottom - (childHeight * parent.overlapFactor));
+        childPosition.bottom = childPosition.top + childHeight + marginRect.top + marginRect.bottom;
+    }
+
+    private void retrieveChildMargins(View child, Rect out) {
+        OverlapLayout.LayoutParams lp = ((OverlapLayout.LayoutParams) child.getLayoutParams());
+        out.set(lp.leftMargin, lp.topMargin, lp.rightMargin, lp.bottomMargin);
+    }
+
+    private void layoutChild(View child, Rect childPosition, Rect marginRect) {
+        child.layout(childPosition.left + marginRect.left, childPosition.top + marginRect.top, childPosition.right - marginRect.right, childPosition.bottom - marginRect.bottom);
     }
 }

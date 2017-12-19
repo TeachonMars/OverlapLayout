@@ -105,9 +105,7 @@ public class OverlapLayout extends ViewGroup {
             View child = getChildAt(pos);
             if (child.getVisibility() != GONE) {
                 measureChildWithMargins(child, widthMeasureSpec, allChildRect.width(), heightMeasureSpec, allChildRect.height());
-                LayoutParams lp = (LayoutParams) child.getLayoutParams();
-                updateAllChildBounds(child.getMeasuredWidth() + lp.leftMargin + lp.rightMargin,
-                        child.getMeasuredHeight() + lp.topMargin + lp.bottomMargin);
+                updateAllChildBounds(child.getMeasuredWidth(), child.getMeasuredHeight(), (LayoutParams) child.getLayoutParams());
                 nbMeasured++;
             }
         }
@@ -116,11 +114,17 @@ public class OverlapLayout extends ViewGroup {
                 resolveSize(Math.max(allChildRect.height(), getSuggestedMinimumHeight()) + verticalPadding, heightMeasureSpec));
     }
 
-    private void updateAllChildBounds(int childWidth, int childHeight) {
+    private void updateAllChildBounds(int childWidth, int childHeight, LayoutParams lp) {
+        int horizontalMargin = lp.leftMargin + lp.rightMargin;
+        int verticalMargin = lp.topMargin + lp.bottomMargin;
         if (orientation == LinearLayoutCompat.HORIZONTAL) {
-            allChildRect.set(0, 0, allChildRect.isEmpty() ? childWidth : (int) (allChildRect.width() + (overlapFactor * childWidth)), Math.max(allChildRect.height(), childHeight));
+            allChildRect.set(0, 0,
+                    (allChildRect.isEmpty() ? childWidth : (int) (allChildRect.width() + childWidth - (overlapFactor * childWidth))) + horizontalMargin,
+                    Math.max(allChildRect.height(), childHeight + verticalMargin));
         } else {
-            allChildRect.set(0, 0, Math.max(allChildRect.width(), childWidth), allChildRect.isEmpty() ? childHeight : (int) (allChildRect.height() + (overlapFactor * childHeight)));
+            allChildRect.set(0, 0,
+                    Math.max(allChildRect.width(), childWidth + horizontalMargin),
+                    (allChildRect.isEmpty() ? childHeight : (int) (allChildRect.height() + childHeight - (overlapFactor * childHeight))) + verticalMargin);
         }
     }
 
