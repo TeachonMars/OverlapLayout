@@ -4,23 +4,14 @@
         apply from: "${rootProject.projectDir}/scripts/${scriptName}.gradle"
 }
 
-task publishBintray(group: "publish") {
-    dependsOn 'clean'
-    dependsOn getBuildTask()
-    dependsOn "${project.path}:bintrayUpload"
-}
-
 task publishLocal(group: "publish") {
-    dependsOn 'clean'
-    dependsOn getBuildTask()
+    dependsOn "${project.path}:clean"
     dependsOn "${project.path}:install"
+    tasks.getByPath("${project.path}:install").mustRunAfter "${project.path}:clean"
 }
 
-def getBuildTask(){
-    def isAndroidProject = project.plugins.hasPlugin('com.android.application') || project.plugins.hasPlugin('com.android.library')
-    if (isAndroidProject) {
-        return "${project.path}:assembleRelease"
-    }else{
-        return "${project.path}:build"
-    }
+task publishBintray(group: "publish") {
+    dependsOn publishLocal
+    dependsOn bintrayUpload
+    bintrayUpload.mustRunAfter publishLocal
 }
