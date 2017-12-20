@@ -101,17 +101,22 @@ public class OverlapLayout extends ViewGroup {
         int verticalPadding = getPaddingTop() + getPaddingBottom();
         int nbMeasured = 0;
         allChildRect.setEmpty();
+        boolean isHorizontal = orientation == LinearLayoutCompat.HORIZONTAL;
         for (int pos = 0, count = getChildCount(); pos < count && nbMeasured < maxChildShowCount; pos++) {
             View child = getChildAt(pos);
             if (child.getVisibility() != GONE) {
-                measureChildWithMargins(child, widthMeasureSpec, allChildRect.width(), heightMeasureSpec, allChildRect.height());
+                if (isHorizontal) {
+                    measureChildWithMargins(child, widthMeasureSpec, allChildRect.width(), heightMeasureSpec, 0);
+                } else {
+                    measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, allChildRect.height());
+                }
                 updateAllChildBounds(child.getMeasuredWidth(), child.getMeasuredHeight(), (LayoutParams) child.getLayoutParams());
                 nbMeasured++;
             }
         }
         setMeasuredDimension(
-                resolveSize(Math.max(allChildRect.width(), getSuggestedMinimumWidth()) + horizontalPadding, widthMeasureSpec),
-                resolveSize(Math.max(allChildRect.height(), getSuggestedMinimumHeight()) + verticalPadding, heightMeasureSpec));
+                resolveSize(Math.max(allChildRect.width() + horizontalPadding, getSuggestedMinimumWidth()), widthMeasureSpec),
+                resolveSize(Math.max(allChildRect.height() + verticalPadding, getSuggestedMinimumHeight()), heightMeasureSpec));
     }
 
     private void updateAllChildBounds(int childWidth, int childHeight, LayoutParams lp) {
